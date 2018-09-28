@@ -104,6 +104,16 @@ defmodule PhoenixActiveLinkTest do
     assert link == expected
   end
 
+  test "active_link with :wrap_tag and :wrap_class_active and :wrap_class_inactive" do
+    expected = content_tag(:li, link("Link", to: "/foo", class: "nav-link"), class: "active nav-item")
+    assert active_link(conn(path: "/foo"), "Link", to: "/foo", wrap_tag: :li, class: "nav-link", wrap_tag_opts: [class_active: "active nav-item"]) == expected
+
+    expected = content_tag(:li, link("Link", to: "/foo", class: "nav-link"), class: "nav-item ")
+    link = active_link(conn(path: "/bar"), "Link", to: "/foo", wrap_tag: :li, class: "nav-link", wrap_tag_opts: [class_inactive: "nav-item"]) == expected
+    assert link == expected
+  end
+
+
   test "customize defaults" do
     Application.put_env(:phoenix_active_link, :defaults, [wrap_tag: :li])
     expected = content_tag(:li, link("Link", to: "/foo", class: "active"), class: "active")
